@@ -4,17 +4,20 @@ import './MainPage.css';
 
 const pageNumbers = [1,2,3,4,5,6,7,8,9,10]
 
+
+
 function MainPage() {
   // массив коктейлей, который будет меняться - переменная состояния
   // const [drinks, setDrinks] = useState(initialDrinks);
 
   // так как TypeScript не знает, что это за массив, мы зададим тип Cocktail[] явно
   const [movies, setMovies] = useState<MovieTypes[]>([]);
-
-  // эти переменные состяния связаны с полями формы
-  // const [drinkTitle, setDrinkTitle] = useState('');
-  // const [drinkImage, setDrinkImage] = useState('');
-
+const [ page, setPage] = useState('1')
+ 
+  const handleChangePage = (page) => {
+    // удаляем коктейль из массива
+    setPage();
+  };
   // если нужно сделать фетч при загрузке компонента
   useEffect(() => {
 
@@ -34,6 +37,7 @@ function MainPage() {
       });
   }, []);
 console.log(movies);
+
 
   // };
 
@@ -66,7 +70,7 @@ console.log(movies);
     </div>
     <div className="pagination">
 {pageNumbers.map((page) => (
-  <div className='page-number'>{page}</div>
+  <div className='page-number' onClick={handleChangePage}>{page}</div>
 ))}
 </div>
     </div>
