@@ -43,11 +43,13 @@ console.log(movies);
 
   return (
     <div className='main'>
-<button>Главная</button>
-<button>Поиск</button>
-<button>Избранное</button>
-    
-    <div className='movie-container'>
+      <div className="container">
+        <div className="navigate-buttons">
+          <button className='navigate-button'>Главная</button>
+          <button className='navigate-button'>Поиск</button>
+          <button className='navigate-button'>Избранное</button>
+        </div>
+        <div className='movie-container'>
       {movies.map((movie) => (
         <div key={movie.id} className="movie-card">
           <div ><img src={star} alt="zzz" className="favorites"/></div>
@@ -60,7 +62,7 @@ console.log(movies);
             alt=""
             
           />}
-          <p>Дата релиза: {movie.releaseDate.year}-{movie.releaseDate.month}-{movie.releaseDate.day}</p>
+          <p className="release">Дата релиза: {movie.releaseDate.year}-{movie.releaseDate.month}-{movie.releaseDate.day}</p>
           <div>
             {/* в случае если нужно что-то передать в функцию-обработчик, то делаем колбэк
             <button type="button" onClick={() => handleRemoveDrink(drink)}>
@@ -72,9 +74,11 @@ console.log(movies);
 
     </div>
     <div className="pagination">
-{pageNumbers.map((page) => (
-  <div className='page-number' onClick={() => handleChangePage(page)}>{page}</div>
-))}
+      {pageNumbers.map((page) => (
+        <div className='page-number' onClick={() => handleChangePage(page)}>{page}</div>
+      ))}
+    </div>
+
 </div>
     </div>
   );
