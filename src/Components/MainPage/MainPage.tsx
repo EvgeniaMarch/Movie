@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import MovieTypes from '../../types/MovieTypes';
 import './MainPage.css';
-
+import star from './star.png'
 const pageNumbers = [1,2,3,4,5,6,7,8,9,10]
 
 
@@ -12,18 +12,18 @@ function MainPage() {
 
   // так как TypeScript не знает, что это за массив, мы зададим тип Cocktail[] явно
   const [movies, setMovies] = useState<MovieTypes[]>([]);
-const [ page, setPage] = useState('1')
+const [ page, setPage] = useState(1)
  
-  const handleChangePage = (page) => {
-    // удаляем коктейль из массива
-    setPage();
+  const handleChangePage = (toPage: number) => {
+    
+    setPage(toPage);
   };
   // если нужно сделать фетч при загрузке компонента
   useEffect(() => {
 
     // `https://moviesdatabase.p.rapidapi.com/titles/x/upcoming?limit=20&page=${page}`
     // получаем с сервера массив коктейлей
-    fetch('https://moviesdatabase.p.rapidapi.com/titles/x/upcoming?limit=20', {
+    fetch(`https://moviesdatabase.p.rapidapi.com/titles/x/upcoming?limit=20&page=${page}`, {
       headers: {
         'content-type': 'application/octet-stream',
         'X-RapidAPI-Key': 'b43102ef80msh328d5408e36820fp143997jsn538b2bc282cf',
@@ -35,7 +35,7 @@ const [ page, setPage] = useState('1')
         // кладём массив в переменную состояния drinks
         setMovies(data.results);
       });
-  }, []);
+  }, [page]);
 console.log(movies);
 
 
@@ -43,11 +43,14 @@ console.log(movies);
 
   return (
     <div className='main'>
-
+<button>Главная</button>
+<button>Поиск</button>
+<button>Избранное</button>
     
     <div className='movie-container'>
       {movies.map((movie) => (
         <div key={movie.id} className="movie-card">
+          <div ><img src={star} alt="zzz" className="favorites"/></div>
           <div>
             <b>{movie.titleText.text}</b>
           </div>
@@ -70,7 +73,7 @@ console.log(movies);
     </div>
     <div className="pagination">
 {pageNumbers.map((page) => (
-  <div className='page-number' onClick={handleChangePage}>{page}</div>
+  <div className='page-number' onClick={() => handleChangePage(page)}>{page}</div>
 ))}
 </div>
     </div>
