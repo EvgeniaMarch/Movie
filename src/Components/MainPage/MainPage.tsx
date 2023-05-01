@@ -2,84 +2,60 @@ import React, { useEffect, useState } from 'react';
 import MovieTypes from '../../types/MovieTypes';
 import './MainPage.css';
 import star from './star.png'
+import SearchPage from '../SearchPage/SearchPage';
+import MoviesList from '../MoviesList/MoviesList';
+import FavoritesPage from '../FavoritesPage/FavoritesPage';
 const pageNumbers = [1,2,3,4,5,6,7,8,9,10]
 
 
 
 function MainPage() {
-  // массив коктейлей, который будет меняться - переменная состояния
-  // const [drinks, setDrinks] = useState(initialDrinks);
 
-  // так как TypeScript не знает, что это за массив, мы зададим тип Cocktail[] явно
-  const [movies, setMovies] = useState<MovieTypes[]>([]);
-const [ page, setPage] = useState(1)
+type pageType = 'search' | 'favorites' | 'list'
+const [pageChange, setPageChange] = useState('list')
+  
+  
+let content;
+
+if (pageChange === 'list') {
+  content = <MoviesList />
+} else if (pageChange === 'search') {
+  content = <SearchPage />
+} else if (pageChange === 'favorites') {
+  content = <FavoritesPage />
+}
+
+const changePageToMain = () => {
+  setPageChange('list')
+}
+
+const changePageToSearch =() => {
+  setPageChange('search')
+}
+
+const changePageToFavorites =() => {
+  setPageChange('favorites')
+}
+
  
-  const handleChangePage = (toPage: number) => {
-    
-    setPage(toPage);
-  };
-  // если нужно сделать фетч при загрузке компонента
-  useEffect(() => {
-
-    // `https://moviesdatabase.p.rapidapi.com/titles/x/upcoming?limit=20&page=${page}`
-    // получаем с сервера массив коктейлей
-    fetch(`https://moviesdatabase.p.rapidapi.com/titles/x/upcoming?limit=20&page=${page}`, {
-      headers: {
-        'content-type': 'application/octet-stream',
-        'X-RapidAPI-Key': 'b43102ef80msh328d5408e36820fp143997jsn538b2bc282cf',
-        'X-RapidAPI-Host': 'moviesdatabase.p.rapidapi.com'
-      }, method: 'GET',
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // кладём массив в переменную состояния drinks
-        setMovies(data.results);
-      });
-  }, [page]);
-console.log(movies);
-
-
-  // };
 
   return (
     <div className='main'>
       <div className="container">
         <div className="navigate-buttons">
-          <button className='navigate-button'>Главная</button>
-          <button className='navigate-button'>Поиск</button>
-          <button className='navigate-button'>Избранное</button>
+          <button className='navigate-button' onClick ={changePageToMain}>Главная</button>
+          <button className='navigate-button' onClick ={changePageToSearch}>Поиск</button>
+          <button className='navigate-button' onClick ={changePageToFavorites}>Избранное</button>
+          
         </div>
-        <div className='movie-container'>
-      {movies.map((movie) => (
-        <div key={movie.id} className="movie-card">
-          <div ><img src={star} alt="zzz" className="favorites"/></div>
-          <div>
-            <b>{movie.titleText.text}</b>
-          </div>
-          {movie.primaryImage && <img
-            width={200}
-            src={movie.primaryImage.url}
-            alt=""
-            
-          />}
-          <p className="release">Дата релиза: {movie.releaseDate.year}-{movie.releaseDate.month}-{movie.releaseDate.day}</p>
-          <div>
-            {/* в случае если нужно что-то передать в функцию-обработчик, то делаем колбэк
-            <button type="button" onClick={() => handleRemoveDrink(drink)}>
-              удалить
-            </button> */}
-          </div>
-        </div>
-      ))}
-
-    </div>
-    <div className="pagination">
-      {pageNumbers.map((page) => (
-        <div className='page-number' onClick={() => handleChangePage(page)}>{page}</div>
-      ))}
-    </div>
-
+       
+   
 </div>
+{/* {pageChange === 'list' ? <MoviesList/> : 'search' ? <SearchPage /> : 'favorites'? <FavoritesPage/> }
+
+
+{pageChange === 'favorites' ? <MoviesList/> : <SearchPage />} */}
+{content}
     </div>
   );
 }

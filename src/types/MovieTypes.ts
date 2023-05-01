@@ -1,4 +1,4 @@
-type Movie = {
+type MovieTypes = {
   id: string;
   titleText: {
     text: string;
@@ -19,4 +19,4 @@ type Movie = {
   };
 };
 
-export default Movie;
+export default MovieTypes;
